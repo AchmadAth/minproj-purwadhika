@@ -22,20 +22,27 @@ const DropdownFiltering = () => {
 
   return (
     <>
-      <Menu>
-        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-          {selectedOption}
-        </MenuButton>
-        <MenuList>
-          {options.map((option) => (
-            <MenuItem key={option} onClick={() => setSelectedOption(option)}>
-              {option}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-      <Flex justifyContent="space-between">
-        <Box>
+      <Flex
+        direction={{ base: 'column', md: 'row' }}
+        align={{ base: 'stretch', md: 'center' }}
+      >
+        <Menu>
+          <MenuButton
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+            marginBottom={{ base: 2, md: 0 }}
+          >
+            {selectedOption}
+          </MenuButton>
+          <MenuList>
+            {options.map((option) => (
+              <MenuItem key={option} onClick={() => setSelectedOption(option)}>
+                {option}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Menu>
+        <Box marginLeft={{ md: 4 }}>
           {selectedOption !== 'All' && `Selected option: ${selectedOption}`}
         </Box>
         <IconButton
@@ -43,6 +50,8 @@ const DropdownFiltering = () => {
           onClick={resetSelectedOption}
           variant="outline"
           isRound
+          marginLeft={{ base: 0, md: 2 }}
+          marginTop={{ base: 2, md: 0 }}
         />
       </Flex>
     </>
