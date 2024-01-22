@@ -16,6 +16,7 @@ import {
 import SearchBar from './SearchBar';
 import SortingComponent from './Sorting';
 import ListEvent from './ListEvent';
+import DropdownFiltering from './Filter';
 
 export default function HomePage() {
   return (
@@ -68,7 +69,8 @@ export default function HomePage() {
       </Container>
       <Box>
         <HStack p={4} spacing={32} alignItems={'center'} justify={'center'}>
-          <SortingComponent />
+          {/* <SortingComponent /> */}
+          <DropdownFiltering />
           <SearchBar />
         </HStack>
       </Box>

@@ -82,7 +82,7 @@ export default function NavBar() {
               mr={4}
               leftIcon={<AddIcon />}
             >
-              <Link href="/dashboard">Create Event</Link>
+              <Link href="/createEvent">Create Event</Link>
             </Button>
             <Menu>
               <MenuButton
