@@ -1,3 +1,7 @@
-export default function Register() {
-  return <div>/Register</div>;
+
+import Register from '../components/Register';
+
+export default function () {
+  return <Register />;
+
 }
