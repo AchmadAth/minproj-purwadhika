@@ -67,13 +67,13 @@ export default function HomePage() {
           </Stack>
         </Stack>
       </Container>
-      <Box>
+      <Container maxW={'3xl'} justify={'center'} p={4}>
         <HStack p={4} spacing={32} alignItems={'center'} justify={'center'}>
           {/* <SortingComponent /> */}
           <DropdownFiltering />
           <SearchBar />
         </HStack>
-      </Box>
+      </Container>
       <Box>
         <ListEvent />
       </Box>
