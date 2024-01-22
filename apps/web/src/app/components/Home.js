@@ -17,7 +17,7 @@ import SearchBar from './SearchBar';
 import SortingComponent from './Sorting';
 import ListEvent from './ListEvent';
 
-export default function CallToActionWithAnnotation() {
+export default function HomePage() {
   return (
     <>
       <Container maxW={'3xl'}>

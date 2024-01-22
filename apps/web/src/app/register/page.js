@@ -1,1 +1,3 @@
-<Text>Register</Text>;
+export default function Register() {
+  return <div>/Register</div>;
+}

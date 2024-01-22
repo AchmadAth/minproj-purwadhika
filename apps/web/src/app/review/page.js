@@ -1,1 +1,3 @@
-<Text>review</Text>;
+export default function Review() {
+  return <div>/Review</div>;
+}

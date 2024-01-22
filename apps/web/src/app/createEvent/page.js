@@ -1,1 +1,3 @@
-<Text>Create Event</Text>;
+export default function CreateEvent() {
+  return <div>/ Create Event</div>;
+}
