@@ -17,6 +17,7 @@ import SearchBar from './SearchBar';
 import SortingComponent from './Sorting';
 import ListEvent from './ListEvent';
 import DropdownFiltering from './Filter';
+import Event from '../getData/getData';
 
 export default function HomePage() {
   return (
