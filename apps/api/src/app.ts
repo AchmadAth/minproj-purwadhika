@@ -10,6 +10,7 @@ import express, {
 import cors from 'cors';
 import { PORT } from './config';
 import { SampleRouter } from './routers/sample.router';
+import { AuthRouter } from './routers/auth.router';
 
 export default class App {
   private app: Express;
@@ -29,13 +30,12 @@ export default class App {
 
   private handleError(): void {
     // not found
-    this.app.use((req: Request, res: Response, next: NextFunction) => {
-      if (req.path.includes('/api/')) {
-        res.status(404).send('Not found !');
-      } else {
-        next();
-      }
-    });
+    this.app.use(
+      (err: Error, req: Request, res: Response, next: NextFunction) => {
+        console.log('ERROR : ', err);
+        res.status(500).send(err);
+      },
+    );
 
     // error
     this.app.use(
@@ -52,12 +52,13 @@ export default class App {
 
   private routes(): void {
     const sampleRouter = new SampleRouter();
-
+    const authRouter = new AuthRouter();
     this.app.get('/', (req: Request, res: Response) => {
       res.send(`Hello, Purwadhika Student !`);
     });
 
     this.app.use('/samples', sampleRouter.getRouter());
+    this.app.use('/auth', authRouter.getRouter());
   }
 
   public start(): void {

@@ -1,1 +1,5 @@
-<Text>Dashboard</Text>;
+import Dashboard from '../components/Dashboard';
+
+export default function () {
+  return <Dashboard />;
+}
