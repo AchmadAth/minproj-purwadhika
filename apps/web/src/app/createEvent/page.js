@@ -1,3 +1,5 @@
+import EventForm from '../components/CreateEvent';
+
 export default function CreateEvent() {
-  return <div>/ Create Event</div>;
+  return <EventForm />;
 }

@@ -49,7 +49,7 @@ const Card = ({ heading, description, icon, href }) => {
           </Text>
         </Box>
         <Button variant={'link'} colorScheme={'blue'} size={'sm'} href={href}>
-          Learn more
+          Buy now
         </Button>
       </Stack>
     </Box>
