@@ -16,11 +16,16 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  Link,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { React, createElement } from 'react';
 
-const Links = ['Dashboard', 'Projects', 'Team'];
+const Links = [
+  { name: 'Home', href: '/home' },
+  { name: 'Dashboard', href: '/dashboard' },
+  'Team',
+];
 
 const NavLink = (props) => {
   const { children } = props;
@@ -63,7 +68,9 @@ export default function NavBar() {
               display={{ base: 'none', md: 'flex' }}
             >
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <Link key={link.name} href={link.href}>
+                  {link.name}
+                </Link>
               ))}
             </HStack>
           </HStack>
@@ -75,7 +82,7 @@ export default function NavBar() {
               mr={4}
               leftIcon={<AddIcon />}
             >
-              Action
+              <Link href="/createEvent">Create Event</Link>
             </Button>
             <Menu>
               <MenuButton
@@ -106,7 +113,9 @@ export default function NavBar() {
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <Link key={link.name} href={link.href}>
+                  {link.name}
+                </Link>
               ))}
             </Stack>
           </Box>

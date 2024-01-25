@@ -49,7 +49,7 @@ const Card = ({ heading, description, icon, href }) => {
           </Text>
         </Box>
         <Button variant={'link'} colorScheme={'blue'} size={'sm'} href={href}>
-          Learn more
+          Buy now
         </Button>
       </Stack>
     </Box>
@@ -61,12 +61,8 @@ export default function ListEvent() {
     <Box p={4}>
       <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
         <Heading fontSize={{ base: '2xl', sm: '4xl' }} fontWeight={'bold'}>
-          Short heading
+          Event List
         </Heading>
-        <Text color={'gray.600'} fontSize={{ base: 'sm', sm: 'lg' }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
-          obcaecati ut cupiditate pariatur, dignissimos, placeat amet officiis.
-        </Text>
       </Stack>
 
       <Container maxW={'5xl'} mt={12}>
@@ -98,6 +94,14 @@ export default function ListEvent() {
           <Card
             heading={'Heading'}
             icon={<Icon as={FcManager} w={10} h={10} />}
+            description={
+              'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
+            }
+            href={'#'}
+          />
+          <Card
+            heading={'Heading'}
+            icon={<Icon as={FcAbout} w={10} h={10} />}
             description={
               'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
             }

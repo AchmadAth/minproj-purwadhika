@@ -16,8 +16,10 @@ import {
 import SearchBar from './SearchBar';
 import SortingComponent from './Sorting';
 import ListEvent from './ListEvent';
+import DropdownFiltering from './Filter';
+import Event from '../getData/getData';
 
-export default function CallToActionWithAnnotation() {
+export default function HomePage() {
   return (
     <>
       <Container maxW={'3xl'}>
@@ -66,12 +68,13 @@ export default function CallToActionWithAnnotation() {
           </Stack>
         </Stack>
       </Container>
-      <Box>
+      <Container maxW={'3xl'} justify={'center'} p={4}>
         <HStack p={4} spacing={32} alignItems={'center'} justify={'center'}>
-          <SortingComponent />
+          {/* <SortingComponent /> */}
+          <DropdownFiltering />
           <SearchBar />
         </HStack>
-      </Box>
+      </Container>
       <Box>
         <ListEvent />
       </Box>

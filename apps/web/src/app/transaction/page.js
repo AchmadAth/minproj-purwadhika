@@ -1,1 +1,3 @@
-<Text>Transaction</Text>;
+export default function Transaction() {
+  return <div>/Transaction</div>;
+}
