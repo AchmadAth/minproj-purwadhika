@@ -18,42 +18,9 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import axios from 'axios';
-import { Alert, AlertIcon, AlertTitle, CloseButton } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
 
 export default function Register() {
-  const router = useRouter(); // Add this line to get the router object
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/auth/regis',
-        formData,
-      );
-      setIsSuccess(true);
-      console.log('Registration successful:', response.data);
-      router.push('/login'); // Replace '/success-page' with your desired route
-    } catch (error) {
-      console.error('Registration failed:', error.message);
-      // Handle error (e.g., show an error message)
-    }
-  };
 
   return (
     <Flex
@@ -77,39 +44,23 @@ export default function Register() {
           boxShadow={'lg'}
           p={8}
         >
-          {isSuccess && (
-            <Alert status="success" mb={4}>
-              <AlertIcon />
-              <AlertTitle mr={2}>Registration successful!</AlertTitle>
-              <CloseButton
-                onClick={() => setIsSuccess(false)}
-                position="absolute"
-                right="8px"
-                top="8px"
-              />
-            </Alert>
-          )}
           <Stack spacing={4}>
             <HStack>
               <Box>
                 <FormControl id="username" isRequired>
                   <FormLabel>Username</FormLabel>
-                  <Input type="text" id="username" onChange={handleChange} />
+                  <Input type="text" />
                 </FormControl>
               </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" id="email" onChange={handleChange} />
+              <Input type="email" />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  onChange={handleChange}
-                />
+                <Input type={showPassword ? 'text' : 'password'} />
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
@@ -131,7 +82,6 @@ export default function Register() {
                 _hover={{
                   bg: 'blue.500',
                 }}
-                onClick={handleSubmit}
               >
                 Sign up
               </Button>
