@@ -1,122 +1,103 @@
-'use client';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Box,
-  Button,
-  Container,
-  Flex,
   Heading,
-  Icon,
-  Stack,
+  Flex,
   Text,
-  useColorModeValue,
+  Card,
+  Input,
+  Button,
+  HStack,
 } from '@chakra-ui/react';
-import { ReactElement } from 'react';
-import {
-  FcAbout,
-  FcAssistant,
-  FcCollaboration,
-  FcDonate,
-  FcManager,
-} from 'react-icons/fc';
+import { SearchIcon } from '@chakra-ui/icons';
+import { debounce } from 'lodash';
+import SortingComponent from './Sorting';
+import DropdownFiltering from './Filter';
 
-const Card = ({ heading, description, icon, href }) => {
+const EventList = () => {
+  const [events, setEvents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Create a debounced version of the handleSearch function
+  const debouncedHandleSearch = debounce(async () => {
+    try {
+      const url = searchQuery
+        ? `http://localhost:8000/events/search/?search=${searchQuery}`
+        : 'http://localhost:8000/events/';
+
+      const response = await axios.get(url);
+      setEvents(response.data);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  }, 500); // Adjust the debounce delay as needed
+
+  useEffect(() => {
+    // Call the debounced function when searchQuery changes
+    debouncedHandleSearch();
+    // Cancel the debounce on component unmount
+    return () => debouncedHandleSearch.cancel();
+  }, [searchQuery, debouncedHandleSearch]);
+
+  const handleSearch = () => {
+    // You can leave this function empty or add any additional logic if needed
+  };
+
   return (
-    <Box
-      maxW={{ base: 'full', md: '275px' }}
-      w={'full'}
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      p={5}
-    >
-      <Stack align={'start'} spacing={2}>
-        <Flex
-          w={16}
-          h={16}
-          align={'center'}
-          justify={'center'}
-          color={'white'}
-          rounded={'full'}
-          bg={useColorModeValue('gray.100', 'gray.700')}
-        >
-          {icon}
+    <Box p={4}>
+      <Heading mb={4}>Event List</Heading>
+      <HStack
+        mb={4}
+        p={4}
+        spacing={32}
+        alignItems={'center'}
+        justify={'center'}
+      >
+        <DropdownFiltering />
+        <Flex>
+          <Input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button onClick={handleSearch} ml={2} leftIcon={<SearchIcon />}>
+            Search
+          </Button>
         </Flex>
-        <Box mt={2}>
-          <Heading size="md">{heading}</Heading>
-          <Text mt={1} fontSize={'sm'}>
-            {description}
-          </Text>
-        </Box>
-        <Button variant={'link'} colorScheme={'blue'} size={'sm'} href={href}>
-          Buy now
-        </Button>
-      </Stack>
+      </HStack>
+      <Flex flexWrap="wrap" justifyContent="space-between">
+        {events.map((event) => (
+          <Card key={event.id} maxW="sm" borderWidth="1px" p={4} mb={4}>
+            <Heading fontSize="xl" mb={2}>
+              {event.title}
+            </Heading>
+            <Text fontSize="md" mb={2}>
+              <Text as={'b'}>Speaker: </Text> {event.speaker}
+            </Text>
+            <Text fontSize="md" mb={2}>
+              <Text as={'b'}>Description:</Text> {event.description}
+            </Text>
+            <Text fontSize="md" mb={2}>
+              <Text as={'b'}>Date:</Text>
+              {event.date}
+            </Text>
+            <Text fontSize="md" mb={2}>
+              <Text as={'b'}>Time:</Text> {event.time}
+            </Text>
+            <Text fontSize="md" mb={2}>
+              <Text as={'b'}>Duration:</Text> {event.duration} min
+            </Text>
+            <Text fontSize="md" mb={2}>
+              <Text as={'b'}> Price:</Text> {event.price}
+            </Text>
+            {/* Add any additional information you want to display on the card */}
+          </Card>
+        ))}
+      </Flex>
     </Box>
   );
 };
 
-export default function ListEvent() {
-  return (
-    <Box p={4}>
-      <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
-        <Heading fontSize={{ base: '2xl', sm: '4xl' }} fontWeight={'bold'}>
-          Event List
-        </Heading>
-      </Stack>
-
-      <Container maxW={'5xl'} mt={12}>
-        <Flex flexWrap="wrap" gridGap={6} justify="center">
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcAssistant} w={10} h={10} />}
-            description={
-              'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
-            }
-            href={'#'}
-          />
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcCollaboration} w={10} h={10} />}
-            description={
-              'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
-            }
-            href={'#'}
-          />
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcDonate} w={10} h={10} />}
-            description={
-              'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
-            }
-            href={'#'}
-          />
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcManager} w={10} h={10} />}
-            description={
-              'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
-            }
-            href={'#'}
-          />
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcAbout} w={10} h={10} />}
-            description={
-              'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
-            }
-            href={'#'}
-          />
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcAbout} w={10} h={10} />}
-            description={
-              'Lorem ipsum dolor sit amet catetur, adipisicing elit.'
-            }
-            href={'#'}
-          />
-        </Flex>
-      </Container>
-    </Box>
-  );
-}
+export default EventList;

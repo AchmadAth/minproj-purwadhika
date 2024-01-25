@@ -20,19 +20,18 @@ model Sample {
   @@map("samples") // if you want to use snake_case format
 }
 
-
 model User {
-  id  Int @id @default(autoincrement())
-  username  String
-  email String @unique
+  id       Int    @id @default(autoincrement())
+  username String
+  email    String @unique
   password String
-  role Role  @default(USER)
+  role     Role   @default(USER)
 }
 
 enum Role {
   USER
   ADMIN
-  }
+}
 
 model Event {
   id          Int      @id @default(autoincrement())
@@ -40,7 +39,9 @@ model Event {
   speaker     String
   description String
   date        String
+  time        String
+  duration    String
   price       String
   createdAt   DateTime @default(now())
   updaterAt   DateTime @updatedAt
-  }
+}

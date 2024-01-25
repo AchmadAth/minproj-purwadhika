@@ -55,6 +55,8 @@ const EventForm = () => {
         speaker: '',
         description: '',
         date: '',
+        time: '',
+        duration: '',
         price: '',
       });
 
@@ -121,13 +123,35 @@ const EventForm = () => {
           </FormControl>
 
           <FormControl>
+            <FormLabel>Time</FormLabel>
+            <Input
+              type="text"
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              placeholder="-- : --- "
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Duration</FormLabel>
+            <Input
+              type="text"
+              name="duration"
+              value={formData.duration}
+              onChange={handleChange}
+              placeholder="enter event duration"
+            />
+          </FormControl>
+
+          <FormControl>
             <FormLabel>Price</FormLabel>
             <Input
               type="text"
               name="price"
               value={formData.price}
               onChange={handleChange}
-              placeholder="Free/ paid"
+              placeholder="Free/ paid (Rp.25.000)"
             />
           </FormControl>
 
