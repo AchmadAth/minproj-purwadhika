@@ -46,7 +46,12 @@ const EventList = () => {
 
   return (
     <Box p={4}>
-      <Heading mb={4}>Event List</Heading>
+      <Box textAlign={'center'}>
+        <Heading mb={4} justifyContent={'center'}>
+          Event List
+        </Heading>
+      </Box>
+
       <HStack
         mb={4}
         p={4}
@@ -55,6 +60,8 @@ const EventList = () => {
         justify={'center'}
       >
         <DropdownFiltering />
+
+        {/* SEARCH */}
         <Flex>
           <Input
             type="text"
@@ -67,32 +74,47 @@ const EventList = () => {
           </Button>
         </Flex>
       </HStack>
+
+      {/* CARD */}
       <Flex flexWrap="wrap" justifyContent="space-between">
         {events.map((event) => (
-          <Card key={event.id} maxW="sm" borderWidth="1px" p={4} mb={4}>
-            <Heading fontSize="xl" mb={2}>
-              {event.title}
-            </Heading>
-            <Text fontSize="md" mb={2}>
-              <Text as={'b'}>Speaker: </Text> {event.speaker}
-            </Text>
-            <Text fontSize="md" mb={2}>
-              <Text as={'b'}>Description:</Text> {event.description}
-            </Text>
-            <Text fontSize="md" mb={2}>
-              <Text as={'b'}>Date:</Text>
-              {event.date}
-            </Text>
-            <Text fontSize="md" mb={2}>
-              <Text as={'b'}>Time:</Text> {event.time}
-            </Text>
-            <Text fontSize="md" mb={2}>
-              <Text as={'b'}>Duration:</Text> {event.duration} min
-            </Text>
-            <Text fontSize="md" mb={2}>
-              <Text as={'b'}> Price:</Text> {event.price}
-            </Text>
-            {/* Add any additional information you want to display on the card */}
+          <Card
+            key={event.id}
+            maxW="sm"
+            borderWidth="1px"
+            p={4}
+            mb={4}
+            position="relative"
+          >
+            <Box display="flex" flexDirection="column" height="100%">
+              <Box flex="1">
+                <Heading fontSize="xl" mb={2}>
+                  {event.title}
+                </Heading>
+                <Text fontSize="md" mb={2}>
+                  <Text as={'b'}>Speaker: </Text> {event.speaker}
+                </Text>
+                <Text fontSize="md" mb={2}>
+                  <Text as={'b'}>Description:</Text> {event.description}
+                </Text>
+                <Text fontSize="md" mb={2}>
+                  <Text as={'b'}>Date:</Text>
+                  {event.date}
+                </Text>
+                <Text fontSize="md" mb={2}>
+                  <Text as={'b'}>Time:</Text> {event.time}
+                </Text>
+                <Text fontSize="md" mb={2}>
+                  <Text as={'b'}>Duration:</Text> {event.duration} min
+                </Text>
+                <Text fontSize="md" mb={2}>
+                  <Text as={'b'}>Price:</Text> {event.price}
+                </Text>
+              </Box>
+              <Box mt="auto">
+                <Button>Buy Now</Button>
+              </Box>
+            </Box>
           </Card>
         ))}
       </Flex>
