@@ -21,6 +21,8 @@ import {
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { React, createElement } from 'react';
 
+// cek apakah ada local storage atau tidak. cek di use effect
+
 const Links = [
   { name: 'Home', href: '/home' },
   { name: 'Dashboard', href: '/dashboard' },
