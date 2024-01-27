@@ -3,7 +3,6 @@ import './globals.css';
 import { ChakraProvider } from '@chakra-ui/react';
 import NavBar from './components/Navbar';
 import Footer from './components/Footer';
-import Navbar from './components/Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
