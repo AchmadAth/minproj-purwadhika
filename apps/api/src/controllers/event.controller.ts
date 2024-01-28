@@ -24,11 +24,30 @@ export class EventController {
 
   async createEventData(req: Request, res: Response) {
     try {
-      const { title, speaker, description, date, time, duration, price } =
-        req.body;
+      const {
+        title,
+        speaker,
+        description,
+        date,
+        time,
+        duration,
+        seats,
+        priceType,
+        priceIDR,
+      } = req.body;
 
       const newEventData = await prisma.event.create({
-        data: { title, speaker, description, date, time, duration, price },
+        data: {
+          title,
+          speaker,
+          description,
+          date,
+          time,
+          duration,
+          seats,
+          priceType,
+          priceIDR,
+        },
       });
       return res.status(201).send(newEventData);
     } catch (error: any) {

@@ -9,6 +9,7 @@ import {
   Input,
   Button,
   HStack,
+  Image, // Import Image component from Chakra UI
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { debounce } from 'lodash';
@@ -20,6 +21,21 @@ const EventList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  const formatPrice = (priceIDR) => {
+    if (priceIDR === null) {
+      return 'Free';
+    } else {
+      // Format the priceIDR if it's not null
+      return rupiah(priceIDR);
+    }
+  };
+
+  const rupiah = (number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    }).format(number);
+  };
   // Create a debounced version of the handleSearch function
   const debouncedHandleSearch = debounce(async () => {
     try {
@@ -103,18 +119,25 @@ const EventList = () => {
                   <Text as={'b'}>Description:</Text> {event.description}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Date:</Text>
-                  {event.date}
+                  <Text as={'b'}>Date:</Text> {event.date}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Time:</Text> {event.time}
+                  <Text as={'b'}>Time:</Text> {event.time} WIB
                 </Text>
                 <Text fontSize="md" mb={2}>
                   <Text as={'b'}>Duration:</Text> {event.duration} min
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Price:</Text> {event.price}
+                  <Text as={'b'}>Seats:</Text> {event.seats}
                 </Text>
+                <Text fontSize="md" mb={2}>
+                  <Text as={'b'}>Price:</Text> {formatPrice(event.priceIDR)}
+                </Text>
+                {/* Display image from public/cover folder */}
+                <Image
+                  src={`../../../public/cover/${event.image}`}
+                  alt="Event Cover"
+                />
               </Box>
               <Box mt="auto">
                 <Button>Buy Now</Button>
