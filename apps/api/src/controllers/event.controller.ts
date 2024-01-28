@@ -4,10 +4,21 @@ import { NextFunction, Request, Response } from 'express';
 export class EventController {
   async getEventData(req: Request, res: Response) {
     try {
-      const eventData = await prisma.event.findMany();
+      const { page = 1 } = req.query;
+      const pageNumber = parseInt(page as string);
+      const itemsPerPage = 5; // Set items per page to 5
+
+      const skip = (pageNumber - 1) * itemsPerPage;
+
+      const eventData = await prisma.event.findMany({
+        skip,
+        take: itemsPerPage,
+      });
+
       return res.status(200).send(eventData);
     } catch (error: any) {
       console.log(error);
+      return res.status(500).send({ error: 'Internal Server Error' });
     }
   }
 
@@ -22,6 +33,7 @@ export class EventController {
       return res.status(201).send(newEventData);
     } catch (error: any) {
       console.log(error);
+      return res.status(500).send({ error: 'Internal Server Error' });
     }
   }
 

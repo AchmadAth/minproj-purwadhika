@@ -18,13 +18,14 @@ import DropdownFiltering from './Filter';
 const EventList = () => {
   const [events, setEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Create a debounced version of the handleSearch function
   const debouncedHandleSearch = debounce(async () => {
     try {
       const url = searchQuery
-        ? `http://localhost:8000/events/search/?search=${searchQuery}`
-        : 'http://localhost:8000/events/';
+        ? `http://localhost:8000/events/search/?search=${searchQuery}&page=${currentPage}`
+        : `http://localhost:8000/events/?page=${currentPage}`;
 
       const response = await axios.get(url);
       setEvents(response.data);
@@ -34,14 +35,18 @@ const EventList = () => {
   }, 500); // Adjust the debounce delay as needed
 
   useEffect(() => {
-    // Call the debounced function when searchQuery changes
+    // Call the debounced function when searchQuery or currentPage changes
     debouncedHandleSearch();
     // Cancel the debounce on component unmount
     return () => debouncedHandleSearch.cancel();
-  }, [searchQuery, debouncedHandleSearch]);
+  }, [searchQuery, currentPage]);
 
   const handleSearch = () => {
     // You can leave this function empty or add any additional logic if needed
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
   return (
@@ -118,6 +123,18 @@ const EventList = () => {
           </Card>
         ))}
       </Flex>
+
+      {/* Pagination */}
+      <Box textAlign="center" mt={4}>
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          mr={2}
+        >
+          Previous
+        </Button>
+        <Button onClick={() => handlePageChange(currentPage + 1)}>Next</Button>
+      </Box>
     </Box>
   );
 };
