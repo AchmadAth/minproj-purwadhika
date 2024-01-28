@@ -15,9 +15,9 @@ import {
   Text,
   useColorModeValue,
   Link,
+  Select,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import { Alert, AlertIcon, AlertTitle, CloseButton } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
@@ -29,6 +29,8 @@ export default function Register() {
     username: '',
     email: '',
     password: '',
+    role: 'USER',
+    referralCode: '',
   });
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -105,22 +107,21 @@ export default function Register() {
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  onChange={handleChange}
-                />
-                <InputRightElement h={'full'}>
-                  <Button
-                    variant={'ghost'}
-                    onClick={() =>
-                      setShowPassword((showPassword) => !showPassword)
-                    }
-                  >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
+                <Input type="password" id="password" onChange={handleChange} />
               </InputGroup>
+            </FormControl>
+            <FormControl id="referralCode">
+              {' '}
+              {/* Updated FormControl for referral code */}
+              <FormLabel>Referral Code</FormLabel>
+              <Input type="text" id="referralCode" onChange={handleChange} />
+            </FormControl>
+            <FormControl id="role" isRequired>
+              <FormLabel>Role</FormLabel>
+              <Select id="role" value={formData.role} onChange={handleChange}>
+                <option value="USER">User</option>
+                <option value="ORGANIZER">Organizer</option>
+              </Select>
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button

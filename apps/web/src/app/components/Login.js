@@ -13,20 +13,68 @@ import {
   Image,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useState } from 'react';
+import axios from 'axios';
+import { Alert, AlertIcon } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [loginError, setLoginError] = useState(null);
+  const router = useRouter(); // Add this line to get the router object
+  // check token dulu.
+  // siapkan global state menyimpan data dalam redux.
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/auth/login',
+        formData,
+      );
+      // Handle successful login here (e.g., store user token in the state or localStorage)
+      console.log('Login successful:', response.data);
+      setLoginError(null); // Reset error state on success
+
+      // Show success message
+      // You can redirect or perform any other action upon successful login
+      alert('Login success');
+      router.push('/home');
+      // Menyimpan token kedalam local storage
+    } catch (error) {
+      // Handle login error (e.g., show an error message)
+      console.error('Login failed:', error.message);
+      setLoginError('Invalid username or email'); // Set error message state
+    }
+  };
+
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={4} w={'full'} maxW={'md'}>
+          {loginError && (
+            <Alert status="error" mb={4}>
+              <AlertIcon />
+              {loginError}
+            </Alert>
+          )}
           <Heading fontSize={'2xl'}>Sign in to your account</Heading>
           <FormControl id="email">
             <FormLabel>Email address</FormLabel>
-            <Input type="email" />
+            <Input type="email" id="email" onChange={handleChange} />
           </FormControl>
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
-            <Input type="password" />
+            <Input type="password" id="password" onChange={handleChange} />
           </FormControl>
           <Stack spacing={6}>
             <Stack
@@ -37,7 +85,11 @@ export default function Login() {
               <Checkbox>Remember me</Checkbox>
               <Text color={'blue.500'}>Forgot password?</Text>
             </Stack>
-            <Button colorScheme={'blue'} variant={'solid'}>
+            <Button
+              colorScheme={'blue'}
+              variant={'solid'}
+              onClick={handleSubmit}
+            >
               Sign in
             </Button>
           </Stack>

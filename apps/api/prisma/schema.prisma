@@ -25,13 +25,19 @@ model User {
   username String
   email    String @unique
   password String
-  role     Role   @default(USER)
+
+  role Role  @default(USER)
+  point Int @default(0)
+  refcode String? @unique
+
 }
 
 enum Role {
   USER
-  ADMIN
-}
+
+  ORGANIZER
+  }
+
 
 model Event {
   id          Int      @id @default(autoincrement())
