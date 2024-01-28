@@ -68,13 +68,13 @@ export default function HomePage() {
           </Stack>
         </Stack>
       </Container>
-      <Container maxW={'3xl'} justify={'center'} p={4}>
-        <HStack p={4} spacing={32} alignItems={'center'} justify={'center'}>
-          {/* <SortingComponent /> */}
-          <DropdownFiltering />
-          <SearchBar />
-        </HStack>
-      </Container>
+      {/* <Container maxW={'3xl'} justify={'center'} p={4}> */}
+      {/* <HStack p={4} spacing={32} alignItems={'center'} justify={'center'}> */}
+      {/* <SortingComponent /> */}
+      {/* <DropdownFiltering />
+          <SearchBar /> */}
+      {/* </HStack> */}
+      {/* </Container> */}
       <Box>
         <ListEvent />
       </Box>

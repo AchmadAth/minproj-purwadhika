@@ -19,7 +19,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
-import { React, createElement } from 'react';
+import { React, createElement, useState, useEffect } from 'react';
 
 // cek apakah ada local storage atau tidak. cek di use effect
 
@@ -50,7 +50,21 @@ const NavLink = (props) => {
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [user, setUser] = useState({ point: 0 });
 
+  useEffect(() => {
+    const fetchUserPoint = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/auth/regis');
+        const userPoint = parseInt(response.data.point, 10); // Parse as an integer
+        setUser({ point: userPoint });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserPoint();
+  }, []);
   return (
     <>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
@@ -86,6 +100,9 @@ export default function NavBar() {
             >
               <Link href="/createEvent">Create Event</Link>
             </Button>
+            <Text mr={4}>
+              <Text as={'b'}>Point: </Text> {user.point}
+            </Text>
             <Menu>
               <MenuButton
                 as={Button}
