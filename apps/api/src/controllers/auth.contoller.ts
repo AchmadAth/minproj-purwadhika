@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import handlebars, { log } from 'handlebars';
 import { sign, verify } from 'jsonwebtoken';
+import { Role } from '@prisma/client';
 
 export class AuthController {
   async registerUser(req: Request, res: Response, next: NextFunction) {
@@ -105,6 +106,7 @@ export class AuthController {
         username: user.username,
         email: user.email,
         token: jwtToken,
+        role: user.role,
       });
     } catch (error) {
       console.log(error);
@@ -129,7 +131,10 @@ export class AuthController {
       return res.status(200).send({
         username: user.username,
         email: user.email,
+        point: user.point,
+        refcode: user.refcode,
         token: jwtToken,
+        role: user.role,
       });
       console.log('Terjemahan token', req.dataUser);
     } catch (error: any) {
@@ -150,9 +155,3 @@ function generateReferralCode(): string {
   }
   return referralCode;
 }
-
-// auth.js
-export const isAuthenticated = () => {
-  const token = localStorage.getItem('token');
-  return token !== null;
-};
