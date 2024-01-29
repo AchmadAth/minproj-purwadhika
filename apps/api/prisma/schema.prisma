@@ -26,28 +26,33 @@ model User {
   email    String @unique
   password String
 
-  role Role  @default(USER)
-  point Int @default(0)
+  role    Role    @default(USER)
+  point   Int     @default(0)
   refcode String? @unique
-
 }
 
 enum Role {
   USER
 
   ORGANIZER
-  }
-
+}
 
 model Event {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   speaker     String
   description String
   date        String
   time        String
   duration    String
-  price       String
-  createdAt   DateTime @default(now())
-  updaterAt   DateTime @updatedAt
+  seats       String
+  priceType   PriceType
+  priceIDR    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum PriceType {
+  FREE
+  PAID
 }

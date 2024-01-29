@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
@@ -12,6 +11,13 @@ import {
   Stack,
   Button,
   useToast,
+  Select, // Import Select component from Chakra UI
+  Modal, // Import Modal component from Chakra UI
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
 } from '@chakra-ui/react';
 
 const EventForm = () => {
@@ -22,17 +28,19 @@ const EventForm = () => {
     date: '',
     time: '',
     duration: '',
-    price: '',
+    seats: '',
+    priceType: '', // Store price type: "Free" or "Paid"
+    priceIDR: null, // Store price in IDR if paid
     gambar: null, // Added for file upload
   });
-
+  const [isPaidModalOpen, setIsPaidModalOpen] = useState(false); // State to control the visibility of the modal
   const toast = useToast();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files[0] : value, // Handle file input separately
+      [name]: files ? files[0] : value,
     }));
   };
 
@@ -40,12 +48,27 @@ const EventForm = () => {
     e.preventDefault();
 
     try {
-      const formDataWithFile = new FormData();
-      for (const key in formData) {
-        formDataWithFile.append(key, formData[key]);
-      }
+      const eventData = {
+        title: formData.title,
+        speaker: formData.speaker,
+        description: formData.description,
+        date: formData.date,
+        time: formData.time,
+        seats: formData.seats,
+        duration: formData.duration,
+        priceType: formData.priceType,
+        priceIDR: formData.priceIDR,
+      };
 
-      const response = await axios.post(
+      const eventResponse = await axios.post(
+        'http://localhost:8000/events/',
+        eventData,
+      );
+
+      const formDataWithFile = new FormData();
+      formDataWithFile.append('gambar', formData.gambar);
+
+      const imageResponse = await axios.post(
         'http://localhost:8000/events/upload',
         formDataWithFile,
         {
@@ -55,7 +78,6 @@ const EventForm = () => {
         },
       );
 
-      //  toast
       toast({
         title: 'Event submitted!',
         description: 'Your event details have been successfully submitted.',
@@ -71,11 +93,13 @@ const EventForm = () => {
         date: '',
         time: '',
         duration: '',
-        price: '',
+        seats: '',
+        priceType: '',
+        priceIDR: null,
         gambar: null,
       });
 
-      console.log('Backend Response:', response.data);
+      console.log('Backend Response:', eventResponse.data, imageResponse.data);
     } catch (error) {
       console.error('Error submitting event:', error);
       toast({
@@ -87,6 +111,12 @@ const EventForm = () => {
         isClosable: true,
       });
     }
+  };
+
+  // Function to handle submission when price is set to "Paid"
+  const handlePaidSubmit = () => {
+    setIsPaidModalOpen(false); // Close the modal
+    handleSubmit(); // Proceed with the form submission
   };
 
   return (
@@ -158,16 +188,33 @@ const EventForm = () => {
               placeholder="enter event duration"
             />
           </FormControl>
+          <FormControl>
+            <FormLabel>Available Seats</FormLabel>
+            <Input
+              type="text"
+              name="seats"
+              value={formData.seats}
+              onChange={handleChange}
+              placeholder="enter available seats"
+            />
+          </FormControl>
 
           <FormControl>
             <FormLabel>Price</FormLabel>
-            <Input
-              type="text"
-              name="price"
-              value={formData.price}
+            <Select
+              name="priceType"
+              value={formData.priceType}
               onChange={handleChange}
-              placeholder="Free/ paid (Rp.25.000)"
-            />
+              placeholder="Select price type"
+            >
+              <option value="FREE">FREE</option>
+              <option value="PAID">PAID</option>
+            </Select>
+            {formData.priceType === 'PAID' && (
+              <Button onClick={() => setIsPaidModalOpen(true)}>
+                Input Price
+              </Button>
+            )}
           </FormControl>
 
           <FormControl>
@@ -185,6 +232,34 @@ const EventForm = () => {
           </Button>
         </Stack>
       </form>
+      {/* Modal for inputting price when paid option is selected */}
+      <Modal isOpen={isPaidModalOpen} onClose={() => setIsPaidModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Input Price</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handlePaidSubmit();
+              }}
+            >
+              <FormControl>
+                <FormLabel>Price (IDR)</FormLabel>
+                <Input
+                  type="number"
+                  name="priceIDR"
+                  value={formData.priceIDR}
+                  onChange={handleChange}
+                  placeholder="Enter price in IDR"
+                />
+              </FormControl>
+              <Button type="submit">Submit</Button>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
