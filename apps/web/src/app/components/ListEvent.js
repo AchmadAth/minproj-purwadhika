@@ -3,23 +3,28 @@ import axios from 'axios';
 import {
   Box,
   Heading,
-  Flex,
   Text,
-  Card,
-  Input,
   Button,
-  HStack,
+  SimpleGrid,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
   Image,
+  ModalFooter,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { debounce } from 'lodash';
-import SortingComponent from './Sorting';
-import DropdownFiltering from './Filter';
+import NavBar from './Navbar';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
+  const [originalEvents, setOriginalEvents] = useState([]); // Track original events
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const formatPrice = (priceIDR) => {
     if (priceIDR === null) {
@@ -44,12 +49,13 @@ const EventList = () => {
 
       const response = await axios.get(url);
       setEvents(response.data);
+      setOriginalEvents(response.data); // Update original events
     } catch (error) {
       console.error('Error fetching events:', error);
     }
   };
 
-  // Debounce the handle search function
+  // Debounce search
   const debouncedHandleSearch = debounce(fetchEventData, 500);
 
   useEffect(() => {
@@ -68,103 +74,145 @@ const EventList = () => {
   };
 
   const handleFilterFreeEvents = () => {
-    const freeEvents = events.filter((event) => event.priceIDR === null);
+    const freeEvents = originalEvents.filter(
+      (event) => event.priceIDR === null,
+    ); // Filter from original events
     setEvents(freeEvents);
   };
 
   const handleShowAllEvents = async () => {
     await fetchEventData();
   };
+
+  const handleCardClick = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedEvent(null);
+  };
+
   return (
-    <Box p={4}>
-      <Box textAlign="center">
-        <Heading mb={4} justifyContent="center">
-          Event List
-        </Heading>
-      </Box>
+    <>
+      <Box p={4}>
+        <Box textAlign="center">
+          <Heading mb={4}>Event List</Heading>
+        </Box>
 
-      <HStack mb={4} p={4} spacing={32} alignItems="center" justify="center">
-        <Button onClick={handleFilterFreeEvents} mb={4}>
-          Free Events
-        </Button>
-
-        <Button onClick={handleShowAllEvents} mb={4}>
-          All
-        </Button>
-
-        <Flex>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <Button onClick={handleSearch} ml={2} leftIcon={<SearchIcon />}>
-            Search
+        <Box
+          mb={4}
+          p={4}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Button onClick={handleFilterFreeEvents} mr={4}>
+            Free Events
           </Button>
-        </Flex>
-      </HStack>
+          <Button onClick={handleShowAllEvents}>All</Button>
+          <Box ml="auto">
+            <Box display="flex">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Button ml={2} leftIcon={<SearchIcon />} onClick={handleSearch}>
+                Search
+              </Button>
+            </Box>
+          </Box>
+        </Box>
 
-      <Flex flexWrap="wrap" justifyContent="space-between">
-        {events.map((event) => (
-          <Card
-            key={event.id}
-            maxW="sm"
-            borderWidth="1px"
-            p={4}
-            mb={4}
-            position="relative"
-          >
-            <Box display="flex" flexDirection="column" height="100%">
-              <Box flex="1">
-                <Heading fontSize="xl" mb={2}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+          {events.map((event) => (
+            <Box
+              key={event.id}
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+            >
+              <Box p={6}>
+                <Heading size="md" mb={2}>
                   {event.title}
                 </Heading>
                 <Text fontSize="md" mb={2}>
-                  <Text as="b">Speaker: </Text> {event.speaker}
+                  <b>Speaker: </b> {event.speaker}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as="b">Description:</Text> {event.description}
+                  <b>Date: </b> {event.date}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as="b">Date:</Text> {event.date}
-                </Text>
-                <Text fontSize="md" mb={2}>
-                  <Text as="b">Time:</Text> {event.time} WIB
-                </Text>
-                <Text fontSize="md" mb={2}>
-                  <Text as="b">Duration:</Text> {event.duration} min
-                </Text>
-                <Text fontSize="md" mb={2}>
-                  <Text as="b">Seats:</Text> {event.seats}
-                </Text>
-                <Text fontSize="md" mb={2}>
-                  <Text as="b">Price:</Text> {formatPrice(event.priceIDR)}
+                  <b>Price: </b> {formatPrice(event.priceIDR)}
                 </Text>
                 <Image
-                  src={`../../../public/cover/${event.image}`}
+                  src={`../../../cover/${event.image}`}
                   alt="Event Cover"
                 />
-              </Box>
-              <Box mt="auto">
-                <Button>Buy Now</Button>
+                <Button mt={4} onClick={() => handleCardClick(event)}>
+                  View Details
+                </Button>
               </Box>
             </Box>
-          </Card>
-        ))}
-      </Flex>
+          ))}
+        </SimpleGrid>
 
-      <Box textAlign="center" mt={4}>
-        <Button
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-          mr={2}
+        <Box textAlign="center" mt={4}>
+          <Button
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            mr={2}
+          >
+            Previous
+          </Button>
+          <Button onClick={() => handlePageChange(currentPage + 1)}>
+            Next
+          </Button>
+        </Box>
+
+        {/* Modal for displaying full event details */}
+        <Modal
+          isOpen={selectedEvent !== null}
+          onClose={handleCloseModal}
+          size={'xl'}
         >
-          Previous
-        </Button>
-        <Button onClick={() => handlePageChange(currentPage + 1)}>Next</Button>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <b>{selectedEvent?.title}</b>
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>
+                <b>Speaker: </b> {selectedEvent?.speaker}
+              </Text>
+              <Text>
+                <b>Date: </b> {selectedEvent?.date}
+              </Text>
+              <Text>
+                <b>Time: </b> {selectedEvent?.time} WIB
+              </Text>
+              <Text>
+                <b>Duration: </b> {selectedEvent?.duration} min
+              </Text>
+              <Text>
+                <b>Seats: </b> {selectedEvent?.seats}
+              </Text>
+              <Text>
+                <b>Price: </b> {formatPrice(selectedEvent?.priceIDR)}
+              </Text>
+              <Text>
+                <b>Description: </b> {selectedEvent?.description}
+              </Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button>Buy Now</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
-    </Box>
+    </>
   );
 };
 
