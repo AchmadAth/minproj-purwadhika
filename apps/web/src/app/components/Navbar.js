@@ -118,7 +118,6 @@ export default function NavBar() {
             </Text>
             <Menu>
               <MenuButton
-                as={Button}
                 rounded={'full'}
                 variant={'link'}
                 cursor={'pointer'}
@@ -132,8 +131,20 @@ export default function NavBar() {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
+                <MenuItem>
+                  {userData && (
+                    <Box>
+                      <Text>Referal Code: {userData.refcode}</Text>
+                    </Box>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {userData && (
+                    <Box>
+                      <Text>Email: {userData.email}</Text>
+                    </Box>
+                  )}
+                </MenuItem>
                 <MenuDivider />
                 <MenuItem>
                   <LogoutButton />

@@ -27,7 +27,6 @@ import { setAuthToken } from '../utils/auth';
 import { useRouter } from 'next/navigation';
 import { checkRole } from '../utils/auth';
 
-
 export default function HomePage() {
   const [userData, setUserData] = useState(null);
   const router = useRouter();
@@ -80,7 +79,7 @@ export default function HomePage() {
           <Text color={'gray.500'}>
             Immerse yourself in a diverse range of workshops led by industry
             experts. From cutting-edge technologies to personal development,
-            there's a workshop to ignite every passion.
+            theres a workshop to ignite every passion.
           </Text>
           {userData && (
             <Box>
