@@ -9,7 +9,7 @@ import {
   Input,
   Button,
   HStack,
-  Image, // Import Image component from Chakra UI
+  Image,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { debounce } from 'lodash';
@@ -25,7 +25,6 @@ const EventList = () => {
     if (priceIDR === null) {
       return 'Free';
     } else {
-      // Format the priceIDR if it's not null
       return rupiah(priceIDR);
     }
   };
@@ -36,11 +35,11 @@ const EventList = () => {
       currency: 'IDR',
     }).format(number);
   };
-  // Create a debounced version of the handleSearch function
-  const debouncedHandleSearch = debounce(async () => {
+
+  const fetchEventData = async (search = '') => {
     try {
-      const url = searchQuery
-        ? `http://localhost:8000/events/search/?search=${searchQuery}&page=${currentPage}`
+      const url = search
+        ? `http://localhost:8000/events/search/?search=${search}&page=${currentPage}`
         : `http://localhost:8000/events/?page=${currentPage}`;
 
       const response = await axios.get(url);
@@ -48,41 +47,51 @@ const EventList = () => {
     } catch (error) {
       console.error('Error fetching events:', error);
     }
-  }, 500); // Adjust the debounce delay as needed
+  };
+
+  // Debounce the handle search function
+  const debouncedHandleSearch = debounce(fetchEventData, 500);
 
   useEffect(() => {
-    // Call the debounced function when searchQuery or currentPage changes
-    debouncedHandleSearch();
-    // Cancel the debounce on component unmount
-    return () => debouncedHandleSearch.cancel();
+    fetchEventData();
+    return () => {
+      debouncedHandleSearch.cancel();
+    };
   }, [searchQuery, currentPage]);
 
   const handleSearch = () => {
-    // You can leave this function empty or add any additional logic if needed
+    debouncedHandleSearch(searchQuery);
   };
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
 
+  const handleFilterFreeEvents = () => {
+    const freeEvents = events.filter((event) => event.priceIDR === null);
+    setEvents(freeEvents);
+  };
+
+  const handleShowAllEvents = async () => {
+    await fetchEventData();
+  };
   return (
     <Box p={4}>
-      <Box textAlign={'center'}>
-        <Heading mb={4} justifyContent={'center'}>
+      <Box textAlign="center">
+        <Heading mb={4} justifyContent="center">
           Event List
         </Heading>
       </Box>
 
-      <HStack
-        mb={4}
-        p={4}
-        spacing={32}
-        alignItems={'center'}
-        justify={'center'}
-      >
-        <DropdownFiltering />
+      <HStack mb={4} p={4} spacing={32} alignItems="center" justify="center">
+        <Button onClick={handleFilterFreeEvents} mb={4}>
+          Free Events
+        </Button>
 
-        {/* SEARCH */}
+        <Button onClick={handleShowAllEvents} mb={4}>
+          All
+        </Button>
+
         <Flex>
           <Input
             type="text"
@@ -96,7 +105,6 @@ const EventList = () => {
         </Flex>
       </HStack>
 
-      {/* CARD */}
       <Flex flexWrap="wrap" justifyContent="space-between">
         {events.map((event) => (
           <Card
@@ -113,27 +121,26 @@ const EventList = () => {
                   {event.title}
                 </Heading>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Speaker: </Text> {event.speaker}
+                  <Text as="b">Speaker: </Text> {event.speaker}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Description:</Text> {event.description}
+                  <Text as="b">Description:</Text> {event.description}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Date:</Text> {event.date}
+                  <Text as="b">Date:</Text> {event.date}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Time:</Text> {event.time} WIB
+                  <Text as="b">Time:</Text> {event.time} WIB
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Duration:</Text> {event.duration} min
+                  <Text as="b">Duration:</Text> {event.duration} min
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Seats:</Text> {event.seats}
+                  <Text as="b">Seats:</Text> {event.seats}
                 </Text>
                 <Text fontSize="md" mb={2}>
-                  <Text as={'b'}>Price:</Text> {formatPrice(event.priceIDR)}
+                  <Text as="b">Price:</Text> {formatPrice(event.priceIDR)}
                 </Text>
-                {/* Display image from public/cover folder */}
                 <Image
                   src={`../../../public/cover/${event.image}`}
                   alt="Event Cover"
@@ -147,7 +154,6 @@ const EventList = () => {
         ))}
       </Flex>
 
-      {/* Pagination */}
       <Box textAlign="center" mt={4}>
         <Button
           disabled={currentPage === 1}
