@@ -9,6 +9,10 @@ import {
   StatNumber,
   useColorModeValue,
 } from '@chakra-ui/react';
+// pages/dashboard.js
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { checkRole } from '../utils/auth';
 
 function StatsCard(props) {
   const { title, stat } = props;
@@ -32,6 +36,15 @@ function StatsCard(props) {
 }
 
 export default function Dashboard() {
+  // const router = useRouter();
+  // useEffect(() => {
+  //   // Check user role when component mounts
+  //   const userRole = checkRole(); // Example function to get user role
+  //   if (userRole !== 'ORGANIZER') {
+  //     router.push('/home'); // Redirect if user doesn't have required role
+  //   }
+  // }, []);
+
   return (
     <Box maxW="7xl" mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
       <chakra.h1

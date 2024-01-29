@@ -35,7 +35,8 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         'http://localhost:8000/auth/login',
@@ -47,6 +48,9 @@ export default function Login() {
 
       // Show success message
       // You can redirect or perform any other action upon successful login
+      // Store token in local storage upon successful login
+      localStorage.setItem('token', response.data.token);
+
       alert('Login success');
       router.push('/home');
       // Menyimpan token kedalam local storage
