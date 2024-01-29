@@ -9,10 +9,15 @@ import {
   StatNumber,
   useColorModeValue,
 } from '@chakra-ui/react';
+
+import NavBar from './Navbar';
+import Footer from './Footer';
+
 // pages/dashboard.js
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { checkRole } from '../utils/auth';
+
 
 function StatsCard(props) {
   const { title, stat } = props;
@@ -46,26 +51,30 @@ export default function Dashboard() {
   // }, []);
 
   return (
-    <Box maxW="7xl" mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      <chakra.h1
-        textAlign={'center'}
-        fontSize={'4xl'}
-        py={10}
-        fontWeight={'bold'}
-      >
-        Your Event Overview
-      </chakra.h1>
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
-        <StatsCard title={'Your on going event'} stat={'5 events'} />
-        <StatsCard title={'Finished Event'} stat={'30 Events'} />
-        <StatsCard title={'Total Ticket Sold'} stat={'10000 Tickets!'} />
-        <StatsCard title={'Your on going event'} stat={'5 events'} />
-        <StatsCard title={'Finished Event'} stat={'30 Events'} />
-        <StatsCard title={'Total Ticket Sold'} stat={'10000 Tickets!'} />
-        <StatsCard title={'Your on going event'} stat={'5 events'} />
-        <StatsCard title={'Finished Event'} stat={'30 Events'} />
-        <StatsCard title={'Total Ticket Sold'} stat={'10000 Tickets!'} />
-      </SimpleGrid>
-    </Box>
+    <>
+      <NavBar />
+      <Box maxW="7xl" mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
+        <chakra.h1
+          textAlign={'center'}
+          fontSize={'4xl'}
+          py={10}
+          fontWeight={'bold'}
+        >
+          Your Event Overview
+        </chakra.h1>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
+          <StatsCard title={'Your on going event'} stat={'5 events'} />
+          <StatsCard title={'Finished Event'} stat={'30 Events'} />
+          <StatsCard title={'Total Ticket Sold'} stat={'10000 Tickets!'} />
+          <StatsCard title={'Your on going event'} stat={'5 events'} />
+          <StatsCard title={'Finished Event'} stat={'30 Events'} />
+          <StatsCard title={'Total Ticket Sold'} stat={'10000 Tickets!'} />
+          <StatsCard title={'Your on going event'} stat={'5 events'} />
+          <StatsCard title={'Finished Event'} stat={'30 Events'} />
+          <StatsCard title={'Total Ticket Sold'} stat={'10000 Tickets!'} />
+        </SimpleGrid>
+      </Box>
+      <Footer />
+    </>
   );
 }

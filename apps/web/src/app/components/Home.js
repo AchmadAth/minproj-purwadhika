@@ -19,9 +19,14 @@ import SortingComponent from './Sorting';
 import ListEvent from './ListEvent';
 import DropdownFiltering from './Filter';
 import Event from '../getData/getData';
+
+import NavBar from './Navbar';
+import Footer from './Footer';
+
 import { setAuthToken } from '../utils/auth';
 import { useRouter } from 'next/navigation';
 import { checkRole } from '../utils/auth';
+
 
 export default function HomePage() {
   const [userData, setUserData] = useState(null);
@@ -54,6 +59,7 @@ export default function HomePage() {
   }, []);
   return (
     <>
+      <NavBar />
       <Container maxW={'3xl'}>
         <Stack
           as={Box}
@@ -86,6 +92,7 @@ export default function HomePage() {
       <Box>
         <ListEvent />
       </Box>
+      <Footer />
     </>
   );
 }

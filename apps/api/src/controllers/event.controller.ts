@@ -6,7 +6,7 @@ export class EventController {
     try {
       const { page = 1 } = req.query;
       const pageNumber = parseInt(page as string);
-      const itemsPerPage = 5; // Set items per page to 5
+      const itemsPerPage = 6; // Set items per page to 5
 
       const skip = (pageNumber - 1) * itemsPerPage;
 

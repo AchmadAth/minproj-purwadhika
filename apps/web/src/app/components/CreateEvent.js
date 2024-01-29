@@ -19,6 +19,8 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
+import NavBar from './Navbar';
+import Footer from './Footer';
 
 const EventForm = () => {
   const [formData, setFormData] = useState({
@@ -113,154 +115,161 @@ const EventForm = () => {
     }
   };
 
-  // Function to handle submission when price is set to "Paid"
+  // Paid
   const handlePaidSubmit = () => {
-    setIsPaidModalOpen(false); // Close the modal
-    handleSubmit(); // Proceed with the form submission
+    setIsPaidModalOpen(false); // tutup modal
+    handleSubmit(); // submit harga
   };
 
   return (
-    <Box p={4}>
-      <Heading mb={4}>Submit Event Details</Heading>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={4}>
-          <FormControl>
-            <FormLabel>Title</FormLabel>
-            <Input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Enter event title"
-            />
-          </FormControl>
+    <>
+      <NavBar />
+      <Box p={4}>
+        <Heading mb={4}>Submit Event Details</Heading>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={4}>
+            <FormControl>
+              <FormLabel>Title</FormLabel>
+              <Input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Enter event title"
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Speaker</FormLabel>
-            <Input
-              type="text"
-              name="speaker"
-              value={formData.speaker}
-              onChange={handleChange}
-              placeholder="Enter speaker name"
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Speaker</FormLabel>
+              <Input
+                type="text"
+                name="speaker"
+                value={formData.speaker}
+                onChange={handleChange}
+                placeholder="Enter speaker name"
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Description</FormLabel>
-            <Textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Enter event description (max 190 chars)"
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Enter event description (max 190 chars)"
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Date</FormLabel>
-            <Input
-              type="text"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              placeholder="dd/mm/yyyy"
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="text"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                placeholder="dd/mm/yyyy"
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Time</FormLabel>
-            <Input
-              type="text"
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              placeholder="-- : --- "
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Time</FormLabel>
+              <Input
+                type="text"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+                placeholder="-- : --- "
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Duration</FormLabel>
-            <Input
-              type="text"
-              name="duration"
-              value={formData.duration}
-              onChange={handleChange}
-              placeholder="enter event duration"
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Available Seats</FormLabel>
-            <Input
-              type="text"
-              name="seats"
-              value={formData.seats}
-              onChange={handleChange}
-              placeholder="enter available seats"
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Duration</FormLabel>
+              <Input
+                type="text"
+                name="duration"
+                value={formData.duration}
+                onChange={handleChange}
+                placeholder="enter event duration"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Available Seats</FormLabel>
+              <Input
+                type="text"
+                name="seats"
+                value={formData.seats}
+                onChange={handleChange}
+                placeholder="enter available seats"
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Price</FormLabel>
-            <Select
-              name="priceType"
-              value={formData.priceType}
-              onChange={handleChange}
-              placeholder="Select price type"
-            >
-              <option value="FREE">FREE</option>
-              <option value="PAID">PAID</option>
-            </Select>
-            {formData.priceType === 'PAID' && (
-              <Button onClick={() => setIsPaidModalOpen(true)}>
-                Input Price
-              </Button>
-            )}
-          </FormControl>
+            <FormControl>
+              <FormLabel>Price</FormLabel>
+              <Select
+                name="priceType"
+                value={formData.priceType}
+                onChange={handleChange}
+                placeholder="Select price type"
+              >
+                <option value="FREE">FREE</option>
+                <option value="PAID">PAID</option>
+              </Select>
+              {formData.priceType === 'PAID' && (
+                <Button onClick={() => setIsPaidModalOpen(true)}>
+                  Input Price
+                </Button>
+              )}
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Upload Image</FormLabel>
-            <Input
-              type="file"
-              name="gambar"
-              onChange={handleChange}
-              accept="image/*" // Restrict to image files
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Upload Image</FormLabel>
+              <Input
+                type="file"
+                name="gambar"
+                onChange={handleChange}
+                accept="image/*" // Restrict to image files
+              />
+            </FormControl>
 
-          <Button type="submit" colorScheme="blue">
-            Submit
-          </Button>
-        </Stack>
-      </form>
-      {/* Modal for inputting price when paid option is selected */}
-      <Modal isOpen={isPaidModalOpen} onClose={() => setIsPaidModalOpen(false)}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Input Price</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handlePaidSubmit();
-              }}
-            >
-              <FormControl>
-                <FormLabel>Price (IDR)</FormLabel>
-                <Input
-                  type="number"
-                  name="priceIDR"
-                  value={formData.priceIDR}
-                  onChange={handleChange}
-                  placeholder="Enter price in IDR"
-                />
-              </FormControl>
-              <Button type="submit">Submit</Button>
-            </form>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </Box>
+            <Button type="submit" colorScheme="blue">
+              Submit
+            </Button>
+          </Stack>
+        </form>
+        {/* Modal untuk masukin harga */}
+        <Modal
+          isOpen={isPaidModalOpen}
+          onClose={() => setIsPaidModalOpen(false)}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Input Price</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handlePaidSubmit();
+                }}
+              >
+                <FormControl>
+                  <FormLabel>Price (IDR)</FormLabel>
+                  <Input
+                    type="number"
+                    name="priceIDR"
+                    value={formData.priceIDR}
+                    onChange={handleChange}
+                    placeholder="Enter price in IDR"
+                  />
+                </FormControl>
+                <Button type="submit">Submit</Button>
+              </form>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </Box>
+      <Footer />
+    </>
   );
 };
 
