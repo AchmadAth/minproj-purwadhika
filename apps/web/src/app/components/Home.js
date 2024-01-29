@@ -1,5 +1,6 @@
 'use client';
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Head from 'next/head';
 import {
   Box,
@@ -18,10 +19,44 @@ import SortingComponent from './Sorting';
 import ListEvent from './ListEvent';
 import DropdownFiltering from './Filter';
 import Event from '../getData/getData';
+
 import NavBar from './Navbar';
 import Footer from './Footer';
 
+import { setAuthToken } from '../utils/auth';
+import { useRouter } from 'next/navigation';
+import { checkRole } from '../utils/auth';
+
+
 export default function HomePage() {
+  const [userData, setUserData] = useState(null);
+  const router = useRouter();
+  useEffect(() => {
+    // Check user role when component mounts
+    const token = localStorage.getItem('token');
+    if (token == null) {
+      router.push('/login');
+    }
+  }, []);
+
+  useEffect(() => {
+    // Get token from local storage
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Set token in request headers
+      setAuthToken(token);
+      // Make authenticated request to fetch user data
+      axios
+        .get('http://localhost:8000/auth/keepLogin')
+        .then((response) => {
+          setUserData(response.data);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch user data:', error);
+          // Handle error
+        });
+    }
+  }, []);
   return (
     <>
       <NavBar />
@@ -47,15 +82,13 @@ export default function HomePage() {
             experts. From cutting-edge technologies to personal development,
             there's a workshop to ignite every passion.
           </Text>
+          {userData && (
+            <Box>
+              <Text fontWeight="bold">Welcome, {userData.username}!</Text>
+            </Box>
+          )}
         </Stack>
       </Container>
-      {/* <Container maxW={'3xl'} justify={'center'} p={4}> */}
-      {/* <HStack p={4} spacing={32} alignItems={'center'} justify={'center'}> */}
-      {/* <SortingComponent /> */}
-      {/* <DropdownFiltering />
-          <SearchBar /> */}
-      {/* </HStack> */}
-      {/* </Container> */}
       <Box>
         <ListEvent />
       </Box>

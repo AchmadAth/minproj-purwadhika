@@ -1,4 +1,6 @@
 'use client';
+import { setAuthToken } from '../utils/auth';
+import axios from 'axios';
 
 import {
   Box,
@@ -20,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { React, createElement, useState, useEffect } from 'react';
+import LogoutButton from './LogoutButton';
 
 // cek apakah ada local storage atau tidak. cek di use effect
 
@@ -51,19 +54,25 @@ const NavLink = (props) => {
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, setUser] = useState({ point: 0 });
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const fetchUserPoint = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/auth/regis');
-        const userPoint = parseInt(response.data.point, 10); // Parse as an integer
-        setUser({ point: userPoint });
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserPoint();
+    // Get token from local storage
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Set token in request headers
+      setAuthToken(token);
+      // Make authenticated request to fetch user data
+      axios
+        .get('http://localhost:8000/auth/keepLogin')
+        .then((response) => {
+          setUserData(response.data);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch user data:', error);
+          // Handle error
+        });
+    }
   }, []);
   return (
     <>
@@ -101,7 +110,11 @@ export default function NavBar() {
               <Link href="/createEvent">Create Event</Link>
             </Button>
             <Text mr={4}>
-              <Text as={'b'}>Point: </Text> {user.point}
+              {userData && (
+                <Box>
+                  <Text>Point: {userData.point}</Text>
+                </Box>
+              )}
             </Text>
             <Menu>
               <MenuButton
@@ -122,7 +135,9 @@ export default function NavBar() {
                 <MenuItem>Link 1</MenuItem>
                 <MenuItem>Link 2</MenuItem>
                 <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
+                <MenuItem>
+                  <LogoutButton />
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>
