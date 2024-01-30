@@ -50,6 +50,7 @@ export default function Login() {
       // You can redirect or perform any other action upon successful login
       // Store token in local storage upon successful login
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('role', response.data.role);
 
       alert('Login success');
       router.push('/home');
