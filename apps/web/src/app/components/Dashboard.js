@@ -2,7 +2,9 @@
 
 import {
   Box,
+  Button,
   chakra,
+  Link,
   SimpleGrid,
   Stat,
   StatLabel,
@@ -17,6 +19,7 @@ import Footer from './Footer';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { checkRole } from '../utils/auth';
+import { AddIcon } from '@chakra-ui/icons';
 
 function StatsCard(props) {
   const { title, stat } = props;
@@ -61,6 +64,17 @@ export default function Dashboard() {
         >
           Your Event Overview
         </chakra.h1>
+        <Box pb={4}>
+          <Button
+            variant={'solid'}
+            colorScheme={'teal'}
+            size={'sm'}
+            mr={4}
+            leftIcon={<AddIcon />}
+          >
+            <Link href="/createEvent">Create Event</Link>
+          </Button>
+        </Box>
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
           <StatsCard title={'Your on going event'} stat={'5 events'} />
           <StatsCard title={'Finished Event'} stat={'30 Events'} />
