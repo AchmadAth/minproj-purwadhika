@@ -100,15 +100,6 @@ export default function NavBar() {
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
-            <Button
-              variant={'solid'}
-              colorScheme={'teal'}
-              size={'sm'}
-              mr={4}
-              leftIcon={<AddIcon />}
-            >
-              <Link href="/createEvent">Create Event</Link>
-            </Button>
             <Text mr={4}>
               {userData && (
                 <Box>
