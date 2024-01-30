@@ -105,12 +105,26 @@ const EventList = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          flexWrap="wrap" // Allow flex items to wrap to next line on smaller screens
         >
-          <Button onClick={handleFilterFreeEvents} mr={4}>
+          <Button
+            onClick={handleFilterFreeEvents}
+            mr={4}
+            mb={{ base: 2, md: 0 }} // Margin bottom on smaller screens only
+            w={{ base: '100%', md: 'auto' }} // Full width on smaller screens, auto width on medium screens and above
+          >
             Free Events
           </Button>
-          <Button onClick={handleShowAllEvents}>All</Button>
-          <Box ml="auto">
+          <Button
+            onClick={handleShowAllEvents}
+            mb={{ base: 2, md: 0 }} // Margin bottom on smaller screens only
+            w={{ base: '100%', md: 'auto' }} // Full width on smaller screens, auto width on medium screens and above
+          >
+            All
+          </Button>
+          <Box ml={{ base: 0, md: 'auto' }} mt={{ base: 2, md: 0 }}>
+            {' '}
+            {/* Align to right and add top margin on smaller screens */}
             <Box display="flex">
               <input
                 type="text"
