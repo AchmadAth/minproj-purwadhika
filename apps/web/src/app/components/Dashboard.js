@@ -18,7 +18,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { checkRole } from '../utils/auth';
 
-
 function StatsCard(props) {
   const { title, stat } = props;
   return (
@@ -41,14 +40,14 @@ function StatsCard(props) {
 }
 
 export default function Dashboard() {
-  // const router = useRouter();
-  // useEffect(() => {
-  //   // Check user role when component mounts
-  //   const userRole = checkRole(); // Example function to get user role
-  //   if (userRole !== 'ORGANIZER') {
-  //     router.push('/home'); // Redirect if user doesn't have required role
-  //   }
-  // }, []);
+  const router = useRouter();
+  useEffect(() => {
+    // Check user role when component mounts
+    const userRole = localStorage.getItem('role');
+    if (userRole !== 'ORGANIZER') {
+      router.push('/home'); // Redirect if user doesn't have required role
+    }
+  }, []);
 
   return (
     <>
